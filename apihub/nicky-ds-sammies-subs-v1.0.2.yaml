@@ -3,16 +3,17 @@
   "info" : {
     "title" : "Nicky D's Sammies and Subs",
     "description" : "This is an API for a restaurant with full CRUD",
-    "version" : "1.0.2"
+    "version" : "1.0.3"
   },
   "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/nicky-ds-sammies-and-subs/1.0.2",
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/nicky-ds-sammies-and-subs/1.0.3",
     "description" : "SwaggerHub API Auto Mocking"
   } ],
   "paths" : {
     "/login" : {
       "post" : {
         "summary" : "User login",
+        "description" : "",
         "operationId" : "loginUser",
         "requestBody" : {
           "content" : {
