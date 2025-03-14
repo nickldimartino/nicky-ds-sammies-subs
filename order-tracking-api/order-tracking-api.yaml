@@ -1,0 +1,77 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Order Tracking API",
+    "description" : "API for providing real-time tracking updates for customer orders.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/order-tracking-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/tracking/orders/{order_id}" : {
+      "get" : {
+        "summary" : "Get order tracking status",
+        "description" : "Retrieve the real-time tracking status of an order.",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Order tracking status retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "order_id" : "order123",
+                      "tracking_status" : "out_for_delivery",
+                      "estimated_delivery_time" : "2025-03-15T18:30:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Order not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "tracking_status" : {
+            "type" : "string",
+            "enum" : [ "order_received", "preparing", "out_for_delivery", "delivered" ]
+          },
+          "estimated_delivery_time" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      }
+    }
+  }
+}
