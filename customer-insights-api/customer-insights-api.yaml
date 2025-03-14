@@ -1,0 +1,97 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Customer Insights API",
+    "description" : "API for tracking customer preferences and ordering habits.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/customer-sights-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/analytics/customers/{customer_id}" : {
+      "get" : {
+        "summary" : "Get customer insights",
+        "description" : "Retrieve data on a customer's ordering habits and preferences.",
+        "parameters" : [ {
+          "name" : "customer_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Customer insights retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "customer_id" : "cust789",
+                      "total_orders" : 35,
+                      "favorite_items" : [ {
+                        "item_id" : "sandwich001",
+                        "name" : "Turkey Club",
+                        "times_ordered" : 12
+                      }, {
+                        "item_id" : "drink002",
+                        "name" : "Iced Tea",
+                        "times_ordered" : 8
+                      } ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Customer not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "total_orders" : {
+            "type" : "integer"
+          },
+          "favorite_items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "item_id" : {
+                  "type" : "string"
+                },
+                "name" : {
+                  "type" : "string"
+                },
+                "times_ordered" : {
+                  "type" : "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
