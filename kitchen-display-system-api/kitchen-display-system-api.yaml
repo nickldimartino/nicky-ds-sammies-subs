@@ -1,0 +1,176 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Kitchen Display System (KDS) API",
+    "description" : "API for routing online and in-store orders to the kitchen for preparation.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/kitchen-display-system-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/kds/orders" : {
+      "post" : {
+        "summary" : "Send order to Kitchen Display System",
+        "description" : "Route an order to the kitchen for preparation.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/kds_orders_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "order_id" : "order123",
+                    "items" : [ {
+                      "item_id" : "sandwich001",
+                      "name" : "Turkey Club",
+                      "quantity" : 2
+                    }, {
+                      "item_id" : "drink002",
+                      "name" : "Iced Tea",
+                      "quantity" : 1
+                    } ],
+                    "priority" : "normal"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Order successfully routed to the kitchen",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "kds_id" : "kds_78910",
+                      "status" : "queued"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid order data"
+          }
+        }
+      }
+    },
+    "/kds/orders/{order_id}" : {
+      "get" : {
+        "summary" : "Get kitchen order status",
+        "description" : "Retrieve the preparation status of an order in the kitchen.",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Order status retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "order_id" : "order123",
+                      "kds_id" : "kds_78910",
+                      "status" : "in_progress"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Order not found in KDS"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "kdsorders_items" : {
+        "type" : "object",
+        "properties" : {
+          "item_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "quantity" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "kds_orders_body" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/kdsorders_items"
+            }
+          },
+          "priority" : {
+            "type" : "string",
+            "enum" : [ "normal", "high" ]
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "kds_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "queued", "in_progress" ]
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "kds_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "queued", "in_progress", "ready" ]
+          }
+        }
+      }
+    }
+  }
+}
