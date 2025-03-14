@@ -1,0 +1,285 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "User Accounts API",
+    "description" : "API for managing user accounts, authentication, and profiles.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/user-accounts-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/users/register" : {
+      "post" : {
+        "summary" : "Register a new user",
+        "description" : "Create a new user account with name, email, and password.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/users_register_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "name" : "John Doe",
+                    "email" : "john.doe@example.com",
+                    "password" : "SecureP@ss123"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "User successfully registered",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "user_id" : "abc123",
+                      "name" : "John Doe",
+                      "email" : "john.doe@example.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request or user already exists"
+          }
+        }
+      }
+    },
+    "/users/login" : {
+      "post" : {
+        "summary" : "User login",
+        "description" : "Authenticate a user and return an access token.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/users_login_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "email" : "john.doe@example.com",
+                    "password" : "SecureP@ss123"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Login successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "access_token" : "eyJhbGciOiJIUzI1NiIsIn...",
+                      "token_type" : "Bearer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/users/{user_id}" : {
+      "get" : {
+        "summary" : "Get user profile",
+        "description" : "Retrieve the profile details of a specific user.",
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User profile retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "user_id" : "abc123",
+                      "name" : "John Doe",
+                      "email" : "john.doe@example.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Update user profile",
+        "description" : "Update user information such as name or email.",
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/users_user_id_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "name" : "Johnathan Doe",
+                    "email" : "john.doe@example.com"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "User profile updated successfully"
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete user account",
+        "description" : "Permanently remove a user account.",
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "User account successfully deleted"
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "users_register_body" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "user_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "users_login_body" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "access_token" : {
+            "type" : "string"
+          },
+          "token_type" : {
+            "type" : "string"
+          }
+        }
+      },
+      "users_user_id_body" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          }
+        }
+      }
+    }
+  }
+}
