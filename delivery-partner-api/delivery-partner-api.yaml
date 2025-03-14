@@ -1,0 +1,155 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Delivery Partner API",
+    "description" : "API for integrating with third-party delivery services like DoorDash, UberEats, and Postmates.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/delivery-partner-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/delivery/request" : {
+      "post" : {
+        "summary" : "Request a delivery",
+        "description" : "Create a new delivery request with a third-party provider.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/delivery_request_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "order_id" : "order123",
+                    "pickup_address" : "123 Main St, City, State",
+                    "delivery_address" : "456 Elm St, City, State",
+                    "provider" : "doordash"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Delivery request created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "delivery_id" : "del_98765",
+                      "status" : "pending"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          }
+        }
+      }
+    },
+    "/delivery/status/{delivery_id}" : {
+      "get" : {
+        "summary" : "Get delivery status",
+        "description" : "Retrieve the current status of a delivery request.",
+        "parameters" : [ {
+          "name" : "delivery_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Delivery status retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "delivery_id" : "del_98765",
+                      "order_id" : "order123",
+                      "status" : "on_the_way"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Delivery not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "delivery_request_body" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "pickup_address" : {
+            "type" : "string"
+          },
+          "delivery_address" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "string",
+            "enum" : [ "doordash", "ubereats", "postmates" ]
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "delivery_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "pending", "accepted", "on_the_way", "delivered" ]
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "delivery_id" : {
+            "type" : "string"
+          },
+          "order_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "pending", "accepted", "on_the_way", "delivered" ]
+          }
+        }
+      }
+    }
+  }
+}
