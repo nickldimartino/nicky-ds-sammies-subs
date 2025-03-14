@@ -1,0 +1,120 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Chatbot & AI Ordering API",
+    "description" : "API for automated order-taking via chatbot or voice assistant.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/chatbot-ai-ordering-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/chatbot/order" : {
+      "post" : {
+        "summary" : "Process an order via chatbot",
+        "description" : "Allow customers to place an order through an AI-powered chatbot.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/chatbot_order_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "customer_id" : "cust123",
+                    "conversation_id" : "conv456",
+                    "items" : [ {
+                      "item_id" : "sandwich001",
+                      "quantity" : 2
+                    }, {
+                      "item_id" : "drink002",
+                      "quantity" : 1
+                    } ],
+                    "special_instructions" : "No onions on the sandwich."
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Order successfully processed via chatbot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "order_id" : "order789",
+                      "status" : "received"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "chatbotorder_items" : {
+        "type" : "object",
+        "properties" : {
+          "item_id" : {
+            "type" : "string"
+          },
+          "quantity" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "chatbot_order_body" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "conversation_id" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/chatbotorder_items"
+            }
+          },
+          "special_instructions" : {
+            "type" : "string",
+            "nullable" : true
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "received", "processing", "completed" ]
+          }
+        }
+      }
+    }
+  }
+}
