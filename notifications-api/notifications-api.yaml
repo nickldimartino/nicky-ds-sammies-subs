@@ -1,0 +1,100 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Notifications API",
+    "description" : "API for sending SMS or push notifications for order status updates.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/notifications-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/notifications/send" : {
+      "post" : {
+        "summary" : "Send a notification",
+        "description" : "Send an SMS or push notification to a customer regarding their order status.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/notifications_send_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "order_id" : "order123",
+                    "customer_id" : "cust789",
+                    "notification_type" : "sms",
+                    "message" : "Your order is now out for delivery!"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Notification sent successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "notification_id" : "notif_5678",
+                      "status" : "sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "notifications_send_body" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "customer_id" : {
+            "type" : "string"
+          },
+          "notification_type" : {
+            "type" : "string",
+            "enum" : [ "sms", "push" ]
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "notification_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "sent", "failed" ]
+          }
+        }
+      }
+    }
+  }
+}
