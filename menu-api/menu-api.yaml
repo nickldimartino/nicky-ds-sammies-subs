@@ -1,0 +1,229 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Menu API",
+    "description" : "API for retrieving and managing the menu of a sandwich and sub shop.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/menu-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/menu" : {
+      "get" : {
+        "summary" : "Get the menu",
+        "description" : "Retrieve the list of available sandwiches, sides, and drinks.",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully retrieved menu",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/inline_response_200"
+                  }
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : [ {
+                      "id" : "1",
+                      "name" : "Turkey Club",
+                      "description" : "Turkey, bacon, lettuce, tomato, and mayo on a sub roll.",
+                      "price" : 8.99,
+                      "category" : "sandwich"
+                    }, {
+                      "id" : "2",
+                      "name" : "Veggie Delight",
+                      "description" : "Lettuce, tomato, cucumber, peppers, and avocado on whole wheat.",
+                      "price" : 7.49,
+                      "category" : "sandwich"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Add a new menu item",
+        "description" : "Create a new menu item with name, description, price, and category.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/menu_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "name" : "Italian Sub",
+                    "description" : "Salami, ham, pepperoni, provolone, lettuce, tomato, and Italian dressing.",
+                    "price" : 9.99,
+                    "category" : "sandwich"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Menu item successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "id" : "3",
+                      "name" : "Italian Sub",
+                      "description" : "Salami, ham, pepperoni, provolone, lettuce, tomato, and Italian dressing.",
+                      "price" : 9.99,
+                      "category" : "sandwich"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menu/{item_id}" : {
+      "get" : {
+        "summary" : "Get a specific menu item",
+        "description" : "Retrieve details of a single menu item by its ID.",
+        "parameters" : [ {
+          "name" : "item_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully retrieved menu item",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "id" : "1",
+                      "name" : "Turkey Club",
+                      "description" : "Turkey, bacon, lettuce, tomato, and mayo on a sub roll.",
+                      "price" : 8.99,
+                      "category" : "sandwich"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Menu item not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "message" : "Menu item not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Remove a menu item",
+        "description" : "Delete a menu item from the system.",
+        "parameters" : [ {
+          "name" : "item_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Menu item successfully deleted"
+          },
+          "404" : {
+            "description" : "Menu item not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "message" : "Menu item not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "category" : {
+            "type" : "string"
+          }
+        }
+      },
+      "menu_body" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "category" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
