@@ -1,0 +1,138 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Compliance API",
+    "description" : "API for ensuring PCI-DSS compliance for secure payments and GDPR/CCPA compliance for customer data protection.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/compliance-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/compliance/pci-dss" : {
+      "get" : {
+        "summary" : "Check PCI-DSS compliance status",
+        "description" : "Retrieve the current PCI-DSS compliance status of the payment system.",
+        "responses" : {
+          "200" : {
+            "description" : "PCI-DSS compliance status retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "status" : "compliant",
+                      "last_audit_date" : "2025-01-15"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compliance/gdpr" : {
+      "get" : {
+        "summary" : "Check GDPR compliance status",
+        "description" : "Retrieve details on how customer data is managed under GDPR regulations.",
+        "responses" : {
+          "200" : {
+            "description" : "GDPR compliance details retrieved",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "data_protection_officer" : "Jane Smith",
+                      "contact_email" : "privacy@mysubshop.com",
+                      "data_retention_policy" : "Customer data is stored for a maximum of 12 months."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compliance/ccpa" : {
+      "get" : {
+        "summary" : "Check CCPA compliance status",
+        "description" : "Retrieve information on CCPA compliance regarding customer data requests and privacy rights.",
+        "responses" : {
+          "200" : {
+            "description" : "CCPA compliance details retrieved",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "opt_out_policy" : "Customers can opt out of data collection via the account settings page.",
+                      "request_data_access" : "Customers can request their data by contacting privacy@mysubshop.com."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "enum" : [ "compliant", "non-compliant" ]
+          },
+          "last_audit_date" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "data_protection_officer" : {
+            "type" : "string"
+          },
+          "contact_email" : {
+            "type" : "string"
+          },
+          "data_retention_policy" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "opt_out_policy" : {
+            "type" : "string"
+          },
+          "request_data_access" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
