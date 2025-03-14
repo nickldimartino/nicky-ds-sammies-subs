@@ -1,0 +1,164 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Inventory Management API",
+    "description" : "API for tracking ingredient levels in real-time and managing stock levels.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/inventory-mgmt-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/inventory" : {
+      "get" : {
+        "summary" : "Get inventory levels",
+        "description" : "Retrieve the current stock levels of ingredients.",
+        "responses" : {
+          "200" : {
+            "description" : "Inventory levels retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/inline_response_200"
+                  }
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : [ {
+                      "ingredient_id" : "ing001",
+                      "name" : "Turkey Meat",
+                      "quantity" : 50,
+                      "unit" : "lbs"
+                    }, {
+                      "ingredient_id" : "ing002",
+                      "name" : "Lettuce",
+                      "quantity" : 10,
+                      "unit" : "lbs"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/{ingredient_id}" : {
+      "put" : {
+        "summary" : "Update inventory levels",
+        "description" : "Modify the stock levels of a specific ingredient.",
+        "parameters" : [ {
+          "name" : "ingredient_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/inventory_ingredient_id_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "quantity" : 75,
+                    "unit" : "lbs"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Inventory updated successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "ingredient_id" : "ing001",
+                      "name" : "Turkey Meat",
+                      "quantity" : 75,
+                      "unit" : "lbs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Ingredient not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "ingredient_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "quantity" : {
+            "type" : "number",
+            "description" : "Amount of stock available"
+          },
+          "unit" : {
+            "type" : "string",
+            "enum" : [ "lbs", "oz", "pieces", "gallons" ]
+          }
+        }
+      },
+      "inventory_ingredient_id_body" : {
+        "type" : "object",
+        "properties" : {
+          "quantity" : {
+            "type" : "number"
+          },
+          "unit" : {
+            "type" : "string",
+            "enum" : [ "lbs", "oz", "pieces", "gallons" ]
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "ingredient_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "quantity" : {
+            "type" : "number"
+          },
+          "unit" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
