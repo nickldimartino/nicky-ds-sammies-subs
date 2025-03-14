@@ -1,0 +1,150 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Driver Dispatch API",
+    "description" : "API for managing an in-house delivery fleet and dispatching drivers.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/driver-dispatch-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/dispatch/assign" : {
+      "post" : {
+        "summary" : "Assign a driver to a delivery",
+        "description" : "Dispatch an available driver to fulfill a delivery order.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/dispatch_assign_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "order_id" : "order123",
+                    "driver_id" : "driver456"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Driver assigned successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "dispatch_id" : "dispatch789",
+                      "status" : "assigned"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          }
+        }
+      }
+    },
+    "/dispatch/status/{dispatch_id}" : {
+      "get" : {
+        "summary" : "Get driver dispatch status",
+        "description" : "Retrieve the status of a dispatched driver for an order.",
+        "parameters" : [ {
+          "name" : "dispatch_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Dispatch status retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "dispatch_id" : "dispatch789",
+                      "order_id" : "order123",
+                      "driver_id" : "driver456",
+                      "status" : "in_transit"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Dispatch not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "dispatch_assign_body" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "driver_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "dispatch_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "assigned", "in_transit", "completed" ]
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "dispatch_id" : {
+            "type" : "string"
+          },
+          "order_id" : {
+            "type" : "string"
+          },
+          "driver_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "assigned", "in_transit", "completed" ]
+          }
+        }
+      }
+    }
+  }
+}
