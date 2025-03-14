@@ -1,0 +1,108 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Sales Analytics API",
+    "description" : "API for providing business insights into sales trends and best-selling items.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/sales-analytics-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/analytics/sales" : {
+      "get" : {
+        "summary" : "Get sales analytics",
+        "description" : "Retrieve sales data for a specified date range.",
+        "parameters" : [ {
+          "name" : "start_date",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "name" : "end_date",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sales analytics retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "total_sales" : 12500.5,
+                      "total_orders" : 450,
+                      "best_selling_items" : [ {
+                        "item_id" : "sandwich001",
+                        "name" : "Turkey Club",
+                        "quantity_sold" : 150
+                      }, {
+                        "item_id" : "drink002",
+                        "name" : "Iced Tea",
+                        "quantity_sold" : 120
+                      } ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid date range"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "total_sales" : {
+            "type" : "number"
+          },
+          "total_orders" : {
+            "type" : "integer"
+          },
+          "best_selling_items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "item_id" : {
+                  "type" : "string"
+                },
+                "name" : {
+                  "type" : "string"
+                },
+                "quantity_sold" : {
+                  "type" : "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
