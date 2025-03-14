@@ -1,0 +1,221 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Authentication & Authorization API",
+    "description" : "API for secure login, authentication, and authorization using OAuth, JWT, or biometric authentication.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/authentication-authorization-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/auth/register" : {
+      "post" : {
+        "summary" : "Register a new user",
+        "description" : "Create an account with email and password authentication.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/auth_register_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "name" : "John Doe",
+                    "email" : "john.doe@example.com",
+                    "password" : "SecureP@ss123"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "User registered successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "user_id" : "user_12345",
+                      "email" : "john.doe@example.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data or user already exists"
+          }
+        }
+      }
+    },
+    "/auth/login" : {
+      "post" : {
+        "summary" : "User login",
+        "description" : "Authenticate a user and return an access token.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/auth_login_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "email" : "john.doe@example.com",
+                    "password" : "SecureP@ss123"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Login successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "access_token" : "eyJhbGciOiJIUzI1NiIsIn...",
+                      "token_type" : "Bearer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/token/refresh" : {
+      "post" : {
+        "summary" : "Refresh access token",
+        "description" : "Refresh an expired JWT access token.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/token_refresh_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "refresh_token" : "refreshtok_123456"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Token refreshed successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "access_token" : "newaccesstok_abcdef",
+                      "token_type" : "Bearer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Invalid or expired refresh token"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "auth_register_body" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "user_id" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "auth_login_body" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "access_token" : {
+            "type" : "string"
+          },
+          "token_type" : {
+            "type" : "string"
+          }
+        }
+      },
+      "token_refresh_body" : {
+        "type" : "object",
+        "properties" : {
+          "refresh_token" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
