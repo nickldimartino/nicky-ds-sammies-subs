@@ -1,0 +1,239 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Gift Card & Coupons API",
+    "description" : "API for managing digital gift cards and promotional discount codes.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/gift-card-coupons-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/gift-cards" : {
+      "post" : {
+        "summary" : "Issue a new gift card",
+        "description" : "Generate a digital gift card for a customer.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/giftcards_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "amount" : 50.0,
+                    "recipient_email" : "customer@example.com"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Gift card issued successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "gift_card_code" : "GC12345",
+                      "balance" : 50.0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gift-cards/{gift_card_code}" : {
+      "get" : {
+        "summary" : "Check gift card balance",
+        "description" : "Retrieve the remaining balance of a gift card.",
+        "parameters" : [ {
+          "name" : "gift_card_code",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Gift card balance retrieved",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "gift_card_code" : "GC12345",
+                      "balance" : 30.0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Gift card not found"
+          }
+        }
+      }
+    },
+    "/coupons" : {
+      "post" : {
+        "summary" : "Create a new discount coupon",
+        "description" : "Generate a promotional discount coupon.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/coupons_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "discount_amount" : 5.0,
+                    "expiration_date" : "2025-12-31"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Coupon successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201_1"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "coupon_code" : "SAVE5",
+                      "discount_amount" : 5.0,
+                      "expiration_date" : "2025-12-31"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coupons/{coupon_code}" : {
+      "get" : {
+        "summary" : "Validate a coupon",
+        "description" : "Check if a coupon is valid and retrieve its discount value.",
+        "parameters" : [ {
+          "name" : "coupon_code",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Coupon is valid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201_1"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "coupon_code" : "SAVE5",
+                      "discount_amount" : 5.0,
+                      "expiration_date" : "2025-12-31"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Coupon not found or expired"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "giftcards_body" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number"
+          },
+          "recipient_email" : {
+            "type" : "string",
+            "format" : "email"
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "gift_card_code" : {
+            "type" : "string"
+          },
+          "balance" : {
+            "type" : "number"
+          }
+        }
+      },
+      "coupons_body" : {
+        "type" : "object",
+        "properties" : {
+          "discount_amount" : {
+            "type" : "number"
+          },
+          "expiration_date" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "inline_response_201_1" : {
+        "type" : "object",
+        "properties" : {
+          "coupon_code" : {
+            "type" : "string"
+          },
+          "discount_amount" : {
+            "type" : "number"
+          },
+          "expiration_date" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      }
+    }
+  }
+}
