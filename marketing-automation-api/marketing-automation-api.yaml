@@ -1,0 +1,101 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Marketing Automation API",
+    "description" : "API for integrating with email campaigns, social media ads, and SMS marketing.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/marketing-automation-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/marketing/campaigns" : {
+      "post" : {
+        "summary" : "Create a new marketing campaign",
+        "description" : "Launch a new email, social media, or SMS marketing campaign.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/marketing_campaigns_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "campaign_name" : "Spring Special Discount",
+                    "channel" : "email",
+                    "target_audience" : "returning_customers",
+                    "message" : "Get 15% off your next order!"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Marketing campaign created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "campaign_id" : "camp_12345",
+                      "status" : "scheduled"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "marketing_campaigns_body" : {
+        "type" : "object",
+        "properties" : {
+          "campaign_name" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string",
+            "enum" : [ "email", "social_media", "sms" ]
+          },
+          "target_audience" : {
+            "type" : "string",
+            "enum" : [ "new_customers", "returning_customers", "all_customers" ]
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "campaign_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "scheduled", "in_progress", "completed" ]
+          }
+        }
+      }
+    }
+  }
+}
