@@ -1,0 +1,163 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Feedback & Reviews API",
+    "description" : "API for collecting and displaying customer reviews.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/feedback-reviews-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/reviews" : {
+      "post" : {
+        "summary" : "Submit a customer review",
+        "description" : "Allows a customer to submit a review for an order.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/reviews_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "order_id" : "order123",
+                    "customer_id" : "cust456",
+                    "rating" : 5,
+                    "comment" : "The sandwich was delicious and arrived on time!"
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Review submitted successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "review_id" : "rev789",
+                      "status" : "submitted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          }
+        }
+      }
+    },
+    "/reviews/{order_id}" : {
+      "get" : {
+        "summary" : "Get reviews for an order",
+        "description" : "Retrieve customer reviews for a specific order.",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Reviews retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/inline_response_200"
+                  }
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : [ {
+                      "review_id" : "rev789",
+                      "customer_id" : "cust456",
+                      "rating" : 5,
+                      "comment" : "The sandwich was delicious and arrived on time!"
+                    } ]
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No reviews found for this order"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "reviews_body" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "string"
+          },
+          "customer_id" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "maximum" : 5,
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "comment" : {
+            "type" : "string",
+            "nullable" : true
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "review_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "submitted", "pending_approval" ]
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "review_id" : {
+            "type" : "string"
+          },
+          "customer_id" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "type" : "integer"
+          },
+          "comment" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
