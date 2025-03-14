@@ -1,0 +1,250 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Loyalty & Rewards API",
+    "description" : "API for managing customer loyalty points and rewards.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DiMartinoNicholas/loyalty-rewards-api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://api.mysubshop.com/v1",
+    "description" : "Production server"
+  } ],
+  "paths" : {
+    "/loyalty/{customer_id}" : {
+      "get" : {
+        "summary" : "Get loyalty points",
+        "description" : "Retrieve the current loyalty points balance for a customer.",
+        "parameters" : [ {
+          "name" : "customer_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully retrieved loyalty points",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "customer_id" : "12345",
+                      "points" : 120
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Customer not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "message" : "Customer not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loyalty/redeem" : {
+      "post" : {
+        "summary" : "Redeem loyalty points",
+        "description" : "Allow customers to redeem their loyalty points for discounts or free items.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/loyalty_redeem_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "customer_id" : "12345",
+                    "points_to_redeem" : 50
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Points successfully redeemed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "customer_id" : "12345",
+                      "remaining_points" : 70,
+                      "reward" : "$5 off next purchase"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Insufficient points",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "message" : "Not enough points to redeem"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loyalty/earn" : {
+      "post" : {
+        "summary" : "Add loyalty points",
+        "description" : "Award loyalty points to a customer for a completed purchase.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/loyalty_earn_body"
+              },
+              "examples" : {
+                "example1" : {
+                  "value" : {
+                    "customer_id" : "12345",
+                    "order_id" : "order56789",
+                    "points_earned" : 25
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Points successfully added",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                },
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "customer_id" : "12345",
+                      "total_points" : 145
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Customer not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "example1" : {
+                    "value" : {
+                      "message" : "Customer not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "points" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "loyalty_redeem_body" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "points_to_redeem" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "remaining_points" : {
+            "type" : "integer"
+          },
+          "reward" : {
+            "type" : "string"
+          }
+        }
+      },
+      "loyalty_earn_body" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "order_id" : {
+            "type" : "string"
+          },
+          "points_earned" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string"
+          },
+          "total_points" : {
+            "type" : "integer"
+          }
+        }
+      }
+    }
+  }
+}
